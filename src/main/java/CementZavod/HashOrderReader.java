@@ -1,20 +1,34 @@
 package CementZavod;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.format.DateTimeParseException;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class HashOrderReader implements OrderReader {
     @Override
     public List<Order> read(String filePath) throws IOException {
         List<Order> orders = new ArrayList();
-        List<String> lines = Files.readAllLines(
-                Paths.get("src/main/resources", filePath));
+        InputStream is = getClass().getClassLoader().getResourceAsStream(filePath);
+
+        if (is == null) {
+            throw new IOException("Файл не найден в resources: " + filePath);
+        }
+
+        List<String> lines = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+        }
+
+
 
         for (String line : lines) {
             if (line.isBlank()) continue;
