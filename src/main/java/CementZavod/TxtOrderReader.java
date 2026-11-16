@@ -20,34 +20,39 @@ public class TxtOrderReader implements OrderReader {
         } else {
             List<String> lines;
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
-                lines = (List)reader.lines().collect(Collectors.toList());
+                lines = (List) reader.lines().collect(Collectors.toList());
             }
 
-            for(String line : lines) {
+            for (String line : lines) {
                 if (!line.isBlank()) {
                     String[] parts = line.split("\\|");
                     if (parts.length != 3) {
-                        System.out.println("Пропущена строка (неверное количество данных): " + line);
+                        printError("Пропущена строка (неверное количество данных): ", line);
                         continue;
                     }
+
                     try {
                         LocalDateTime time = LocalDateTime.parse(parts[0]);
                         String company = parts[1];
                         double quantity = Double.parseDouble(parts[2]);
                         if (quantity < 0) {
-                            System.out.println("Пропущена строка (отрицательное количество): " + line);
+                            printError("Пропущена строка (отрицательное количество): ", line);
                             continue;
                         }
                         orders.add(new Order(time, company, quantity));
                     } catch (DateTimeParseException e) {
-                        System.out.println("Ошибка: неверная дата в строке: " + line);
+                        printError("Ошибка: неверная дата в строке: ", line);
+
+                    } catch (NumberFormatException e) {
+                        printError("Ошибка: текст вместо количества в строке: ", line);
                     }
-                    catch (NumberFormatException e) {
-                        System.out.println("Ошибка: текст вместо количества в строке: " + line);
-                    }
+
                 }
             }
         }
-            return orders;
+        return orders;
+    }
+    private void printError(String message, String line) {
+        System.out.println(message + line);
     }
 }
