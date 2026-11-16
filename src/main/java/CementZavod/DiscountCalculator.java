@@ -21,7 +21,7 @@ public class DiscountCalculator {
         double currentDiscount = this.startDiscount;
 
         for(Order order : sortedOrders) {
-            double price = order.getQuantity() * this.basePrice * ((double)1.0F - currentDiscount);
+            double price = order.getQuantity() * this.basePrice * (1.0 - currentDiscount);
             result.merge(order.getCompany(), price, Double::sum);
             currentDiscount = Math.max((double)0.0F, currentDiscount - this.stepDiscount);
         }

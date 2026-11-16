@@ -13,7 +13,8 @@ public class HashOrderReader implements OrderReader {
     @Override
     public List<Order> read(String filePath) throws IOException {
         List<Order> orders = new ArrayList();
-        List<String> lines = Files.readAllLines(Paths.get(filePath));
+        List<String> lines = Files.readAllLines(
+                Paths.get("src/main/resources", filePath));
 
         for (String line : lines) {
             if (line.isBlank()) continue;
