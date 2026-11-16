@@ -12,23 +12,8 @@ import java.io.InputStreamReader;
 public class HashOrderReader implements OrderReader {
     @Override
     public List<Order> read(String filePath) throws IOException {
-        List<Order> orders = new ArrayList();
-        InputStream is = getClass().getClassLoader().getResourceAsStream(filePath);
-
-        if (is == null) {
-            throw new IOException("Файл не найден в resources: " + filePath);
-        }
-
-        List<String> lines = new ArrayList<>();
-
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                lines.add(line);
-            }
-        }
-
-
+        List<Order> orders = new ArrayList<>();
+        List<String> lines = new ResourceFileReader().readLines(filePath);
 
         for (String line : lines) {
             if (line.isBlank()) continue;
