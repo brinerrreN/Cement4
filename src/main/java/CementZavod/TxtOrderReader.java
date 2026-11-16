@@ -9,7 +9,7 @@ import java.util.List;
 
 public class TxtOrderReader implements OrderReader {
     public List<Order> read(String filePath) throws IOException {
-        List<Order> orders = new ArrayList();
+        List<Order> orders = new ArrayList<>();
 
         List<String> lines = new ResourceFileReader().readLines(filePath);
 
